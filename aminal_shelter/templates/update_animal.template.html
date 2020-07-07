@@ -1,0 +1,23 @@
+{% extends 'layout.template.html' %}
+
+{% block content %}
+<h2>Update Animal</h2>
+<form method="POST">
+    <div class="form-group">
+        <label>Name:</label>
+        <input type="text" class="form-control" name="animal-name" value="{{animal.name}}"/>
+    </div>
+
+    <div class="form-group">
+        <label>Type:</label>
+        <input type="text" class="form-control" name="type" value="{{animal.type}}"/> 
+    </div>
+
+    <div class="form-group">
+        <label>Breed:</label>
+        <input type="text" class="form-control" name="breed" value="{{animal.breed}}"/>
+    </div>
+
+    <input type="submit" class="btn btn-primary"/>
+</form>
+{% endblock%}

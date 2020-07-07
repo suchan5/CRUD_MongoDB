@@ -1,0 +1,25 @@
+{% extends 'layout.template.html' %}
+
+{% block content %}
+<a href="{{url_for('create_animal')}}" class="btn btn-primary">Crearw New </a>
+<h1>All Animals</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="row">Name</th>
+            <th scope="row">Title</th>
+            <th scope="row">Breed</th>
+            <th></th>
+        </tr>
+    </thead>
+	<tbody>
+    {% for a in all_animals %}
+		<tr>
+			<td>{{a.name}}</td>
+            <td>{{a.type}}</td>
+            <td>{{a.breed}}</td>
+		</tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock%}
