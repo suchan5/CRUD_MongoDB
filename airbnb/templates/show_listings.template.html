@@ -1,0 +1,26 @@
+{% extends 'layout.template.html' %}
+
+{% block content %}
+<h1>Listings</h1>
+    {% if page_number > 0 %}
+        <a href="/?page={{page_number-1}}" class="btn btn-primary">Previous 20 listings</a>
+    {% endif %}
+    
+    <a href="/?page={{page_number+1}}" class="btn btn-primary">Next 20 listings</a>
+
+    {% for l in all_listings %}
+    <div class="card">
+        <img src="{{l.images.picture_url}}" class="card-img-top" alt="Card Image Cap">
+        <div class="card-body">
+            <div class="card-title">{{l.name}}</div>
+            <div class="card-text">
+                <h4>Summary: </h4>
+                 {{l.summary}}
+            </div>
+        </div>
+    </div>
+            
+           
+
+    {% endfor%}
+{% endblock%}
