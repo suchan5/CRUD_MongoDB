@@ -8,9 +8,17 @@
         <input type="text" class="form-control" name="animal-name" value="{{animal.name}}"/>
     </div>
 
-    <div class="form-group">
+     <div class="form-group">
         <label>Type:</label>
-        <input type="text" class="form-control" name="type" value="{{animal.type}}"/> 
+        <select class="form-control" name="animal-type">
+            {% for t in all_animal_types %}
+                {% if t._id == animal.type._id %}
+                <option value="{{t._id}}" selected>{{t.type_name}}</option>
+                {% else %}
+                <option value="{{t._id}}">{{t.type_name}}</option>
+                {% endif %}
+            {% endfor%}
+        </select>
     </div>
 
     <div class="form-group">

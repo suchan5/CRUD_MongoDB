@@ -7,7 +7,7 @@
     <thead>
         <tr>
             <th scope="row">Name</th>
-            <th scope="row">Title</th>
+            <th scope="row">Type</th>
             <th scope="row">Breed</th>
             <th></th>
         </tr>
@@ -16,11 +16,11 @@
     {% for a in all_animals %}
 		<tr>
 			<td>{{a.name}}</td>
-            <td>{{a.type}}</td>
+            <td>{{a.type.name}}</td>
             <td>{{a.breed}}</td>
             <td>
                 <a class="btn btn-primary btn-sm" href="{{ url_for('update_animal', id=a._id) }}">Edit</a>
-               
+                <a class="btn btn-danger btn-sm" href="{{ url_for('delete_animal', animal_id=a._id) }}">Delete</a>
             </td>
 		</tr>
     {% endfor %}
