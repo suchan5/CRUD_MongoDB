@@ -57,6 +57,24 @@ def update_animal(id):
                            )
 
 
+@app.route('/animal/update/<id>', methods=['POST'])
+def process_update_animal(id):
+    animal_name = request.form.get('animal-name')
+    animal_type = request.form.get('type')
+    animal_breed = request.form.get('breed')
+
+    client[DB_NAME].animals.update_one({
+        "_id": ObjectId(id)
+    }, {
+        "$set": {
+            "name": animal_name,
+            "type": animal_type,
+            "breed": animal_breed
+        }
+    })
+    return redirect(url_for('show_all_animals'))
+
+
 # "magic code" -- boilerplate
 if __name__ == '__main__':
     app.run(host=os.environ.get('IP'),
