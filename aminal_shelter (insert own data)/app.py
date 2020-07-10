@@ -37,7 +37,7 @@ def process_create_animal():
     animal_breed = request.form.get('breed')
 
     animal_type_object = client[DB_NAME].animal_types.find_one({  # 요 코딩을 따로 해주는 이유는 Dropdown때문임. dropdown만들고 나서 데이터를 새로insert하면 'type :Dog'이런 식으로 떠야하는데 'type: skdjlskdj' 그 id가 떠버림. 그래서 이 코딩을 통해서 문제를 해결
-        "_id": ObjectId(animal_type),
+        "_id": ObjectId(animal_type)                              # btw, mongoDB에 가서 직접 animal_types라는 콜렉션 만들어줬다, 코딩으로 해서 insert한게 아니라. 기억나지? 
     })
 
     client[DB_NAME].animals.insert_one({  # 'animals'가 colleaction name이 되서 mongoDB Atlas에 collection으로 생성된다.
@@ -75,6 +75,8 @@ def update_animal(id):
 
 @app.route('/animal/update/<id>', methods=['POST'])
 def process_update_animal(id):
+    print(request.form)
+
     animal_name = request.form.get('animal-name')
     animal_type = request.form.get('animal-type')
     animal_breed = request.form.get('breed')

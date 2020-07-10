@@ -3,7 +3,7 @@
 {% block content %}
 <h1>Listings</h1>
     {% if page_number > 0 %}
-        <a href="/?page={{page_number-1}}" class="btn btn-primary">Previous 20 listings</a>
+    <a href="/?page={{page_number-1}}" class="btn btn-primary">Previous 20 listings</a>
     {% endif %}
     
     <a href="/?page={{page_number+1}}" class="btn btn-primary">Next 20 listings</a>
@@ -19,8 +19,5 @@
             </div>
         </div>
     </div>
-            
-           
-
     {% endfor%}
 {% endblock%}
