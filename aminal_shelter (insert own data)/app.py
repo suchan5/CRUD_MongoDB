@@ -4,6 +4,7 @@ from bson.objectid import ObjectId
 from dotenv import load_dotenv
 import pymongo
 
+# load in the variable in the .env file into our operating system environment
 load_dotenv()
 
 app = Flask(__name__)

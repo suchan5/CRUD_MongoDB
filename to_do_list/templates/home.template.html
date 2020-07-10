@@ -1,0 +1,39 @@
+{% extends 'layout.template.html' %}
+
+{% block title %}To Do List{% endblock %}
+
+{% block content %}
+<h2>Tasks</h2>
+<a href="{{url_for('create_task')}}" class="btn btn-primary">Crearw New </a>
+<ul class="list-group mt-3">
+{% for t in tasks %}
+    <li class="list-group-item">
+        <input type="checkbox" class="task-checkbox" data-task-id="{{t._id}}"/>
+        {{t.task_name}}
+    </li>
+{% endfor%}
+</ul>
+{% endblock %}
+
+{%block js%}
+<script>
+$(function(){
+    $(".task-checkbox").change(function(){
+        console.log("Checkbox clicked");
+        let task_id = $(this).data('task-id');
+        console.log(task_id);
+
+        //  F12 눌러서 'network'가면 succesfully됐는지 확인 가능. checkbox눌렀을 때 ajax 성공적으로 됐으면 그린라이트 뜬다
+        $.ajax({
+            'url': "{{url_for('check_task')}}",
+            'dataType': 'json',
+            'contentType': 'application/json',
+            'data': JSON.stringify({
+                'task_id': task_id
+            }),
+            'type': 'PATCH'
+        })
+    })
+})
+</script>
+{%endblock%}
