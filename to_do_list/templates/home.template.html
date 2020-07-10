@@ -8,7 +8,11 @@
 <ul class="list-group mt-3">
 {% for t in tasks %}
     <li class="list-group-item">
+        {% if t.done %}
+        <input type="checkbox" class="task-checkbox" data-task-id="{{t._id}}" checked/>
+        {% else %}
         <input type="checkbox" class="task-checkbox" data-task-id="{{t._id}}"/>
+        {% endif %}
         {{t.task_name}}
     </li>
 {% endfor%}
@@ -24,6 +28,7 @@ $(function(){
         console.log(task_id);
 
         //  F12 눌러서 'network'가면 succesfully됐는지 확인 가능. checkbox눌렀을 때 ajax 성공적으로 됐으면 그린라이트 뜬다
+        // 그리고 항상 mongo Atlas 가서 refresh 눌러보면서 데이터 잘 업뎃되었나 꼭 확인
         $.ajax({
             'url': "{{url_for('check_task')}}",
             'dataType': 'json',
@@ -32,7 +37,22 @@ $(function(){
                 'task_id': task_id
             }),
             'type': 'PATCH'
+        }).then(()=>{  // arrow('=>')를 써야지 요 'this'를 사용가능
+            console.log(this.checked);
+            if (this.checked){
+                toastr.success("Item has been marked 'Done'!");
+            } else {
+                toastr.success("Item has been marked 'Not Done'!");
+            }
+            
         })
+
+        // alternative syntax using axios (much simpler)
+        // let url = "{{url_for('check_task')}}";
+        // axios.patch(url, {
+        //   'task_id': task_id
+        // })
+
     })
 })
 </script>
