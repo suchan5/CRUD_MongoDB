@@ -1,9 +1,11 @@
-from flask import Flask, render_template, request, redirect, url_for, flash # 요 flash 해줘야 flashing message사용가능
+# 요 flash 해줘야 flashing message사용가능
+from flask import Flask, render_template, request, redirect, url_for, flash
 import os
 from dotenv import load_dotenv
-from bson import ObjectId  # 요거는 checkbox tick하는 부분 때문에 필요함. bson은 for computer to read json이랑 같은데 컴터 읽기 전용이다.
+# 요거는 checkbox tick하는 부분 때문에 필요함. bson은 for computer to read json이랑 같은데 컴터 읽기 전용이다.
+from bson import ObjectId
 import pymongo
-import datetime  # date사용할 것이므로 요고 써줘야함 
+import datetime  # date사용할 것이므로 요고 써줘야함
 
 # load in the variable in the .env file into our operating system environment
 load_dotenv()
@@ -18,15 +20,44 @@ client = pymongo.MongoClient(MONGO_URI)
 DB_NAME = "todolist"
 
 # read in the SESSION_KEY variable from the operating system environment
-SESSION_KEY= os.environ.get('SESSION_KEY')
+SESSION_KEY = os.environ.get('SESSION_KEY')
 
-# set the session key 
+# set the session key
 app.secret_key = SESSION_KEY
 
 # The HOME route : display all the tasks
+
+
 @app.route('/')
 def home():
-    tasks = client[DB_NAME].todos.find().limit(10)
+    # extract out the search terms
+    search_terms = request.args.get('search-terms')
+    print(search_terms)
+
+    # criteria dictionary to store all the criteria 
+    criteria = {}
+
+    # if there are search terms, add it to the criteria object
+    if search_terms != "" and search_terms is not None:
+        criteria['task_name'] = {
+            "$regex": search_terms,  # this allows to search for partial string, 정확한 키워드 입력을 뙇해야만 되는게 아니라 그 특정 단어가 들어간건 다 검색되게 ㅋㅋ
+            "$options": "i"  # i means not case-sensitive :대소문자 상관없다는 뜻
+        }
+    '''
+    mongoshell로 연결해서 먼저 어떤 식으로 원하는 정보 찾을 건지, mongoDB 문법으로 아래처럼 구현해보고 그 다음에 플라스크에서 파이썬 문법으로 구현.
+    Translate the following mongo to pymongo
+    db.todos.find({
+        'done': true 
+    })
+
+    JS 문법이라서 true쓸 때 t 소문자로
+    '''
+    search_for_done = request.args.get('is_done')
+    if search_for_done is not None and search_for_done is not False:
+        criteria['done'] = True
+
+    # i must pass the 'criteria' inside 'find()' to find in the function for search terms
+    tasks = client[DB_NAME].todos.find(criteria).limit(10)
     return render_template('home.template.html',
                            tasks=tasks
                            )
@@ -52,7 +83,8 @@ def create_task():
         "comments": comments,
         "done": False
     })
-    flash(f"New Task '{task_name}'' has been created")  # 'f' is Formatted String. 요걸 해주면 '{task_name}'이런식으로 string("")안에서도 variable 사용가능
+    # 'f' is Formatted String. 요걸 해주면 '{task_name}'이런식으로 string("")안에서도 variable 사용가능
+    flash(f"New Task '{task_name}'' has been created")
     return redirect(url_for('home'))
 
 
@@ -65,6 +97,8 @@ PATCH - Modify existing data by changing one aspect of the old data
 DELETE - Delete existing data
 GET - Fatch data
 '''
+
+
 @app.route('/tasks/check', methods=['PATCH'])
 def check_task():
     task_id = request.json.get('task_id')
