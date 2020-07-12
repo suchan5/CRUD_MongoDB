@@ -56,6 +56,8 @@ def home():
     if search_for_done is not None and search_for_done is not False:
         criteria['done'] = True
 
+    print(criteria)
+
     # i must pass the 'criteria' inside 'find()' to find in the function for search terms
     tasks = client[DB_NAME].todos.find(criteria).limit(10)
     return render_template('home.template.html',
